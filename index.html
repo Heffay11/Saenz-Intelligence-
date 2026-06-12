@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saenz Intelligence — AI Audits for Business Owners</title>
+<meta name="description" content="Flat-fee AI audits for business owners and professional practices whose time is worth more than figuring this out alone.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0f1722;           /* blue-black */
+    --ink-2:#18222f;         /* raised dark surface */
+    --paper:#f6f6f2;         /* warm paper */
+    --white:#ffffff;
+    --muted:#3d4751;
+    --dark-body:rgba(240,243,247,.82);   /* readable body text on dark */
+    --dark-soft:rgba(240,243,247,.6);
+    --blue:#2456c4;          /* light surfaces */
+    --blue-bright:#6ea8ff;   /* dark surfaces */
+    --blue-deep:#1a3f8f;
+    --line:rgba(15,23,34,.12);
+    --line-dark:rgba(240,243,247,.14);
+    --radius:14px;
+    --maxw:1100px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);background:var(--paper);
+    line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:600;line-height:1.08;letter-spacing:-.02em}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;font-size:.74rem;font-weight:600;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;
+  }
+  .btn{
+    display:inline-block;padding:15px 30px;border-radius:10px;border:0;cursor:pointer;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;text-decoration:none;
+    transition:transform .16s ease, box-shadow .16s ease, background .16s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn-blue{background:var(--blue);color:#fff;box-shadow:0 6px 20px rgba(36,86,196,.32)}
+  .btn-blue:hover{background:#1d4aad;box-shadow:0 10px 26px rgba(36,86,196,.42)}
+  .btn-ghost{background:transparent;color:var(--paper);border:1.5px solid rgba(240,243,247,.4)}
+  .btn-ghost:hover{border-color:var(--blue-bright);color:var(--blue-bright)}
+
+  /* subtle dot-grid for dark sections */
+  .gridbg{position:relative}
+  .gridbg::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(rgba(240,243,247,.05) 1px, transparent 1px);
+    background-size:28px 28px;
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, transparent 70%);
+            mask-image:linear-gradient(to bottom, #000 0%, transparent 70%);
+  }
+  .gridbg > .wrap{position:relative;z-index:1}
+
+  /* ============ NAV ============ */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    backdrop-filter:blur(12px);background:rgba(15,23,34,.82);
+    border-bottom:1px solid var(--line-dark);
+  }
+  .nav-inner{max-width:var(--maxw);margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between}
+  .logo{font-family:'Space Grotesk',sans-serif;font-size:1.12rem;font-weight:700;color:#fff;text-decoration:none;letter-spacing:-.01em}
+  .logo em{font-style:normal;color:var(--blue-bright)}
+  .nav-cta{font-size:.86rem;padding:10px 20px}
+
+  /* ============ HERO ============ */
+  .hero{background:var(--ink);color:#fff;padding:158px 0 96px;overflow:hidden}
+  .hero h1{font-size:clamp(2.5rem,5.6vw,4.1rem);max-width:16ch;margin-bottom:24px;color:#fff}
+  .hero h1 .hl{color:var(--blue-bright)}
+  .hero p.sub{font-size:1.15rem;color:var(--dark-body);max-width:54ch;margin-bottom:36px}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'Space Grotesk',sans-serif;font-size:.76rem;font-weight:600;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--dark-body);margin-bottom:26px;
+    border:1px solid var(--line-dark);border-radius:999px;padding:8px 16px;
+  }
+  .pulse{width:7px;height:7px;border-radius:50%;background:var(--blue-bright);box-shadow:0 0 0 0 rgba(110,168,255,.55);animation:pulse 2.2s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 8px rgba(110,168,255,0)}100%{box-shadow:0 0 0 0 rgba(110,168,255,0)}}
+
+  /* ============ CALCULATOR (now directly under hero) ============ */
+  .calc{background:var(--paper);color:var(--ink);padding:90px 0;border-top:1px solid var(--line)}
+  .calc .eyebrow{color:var(--blue)}
+  .calc h2{font-size:clamp(1.8rem,3.4vw,2.5rem);margin-bottom:12px;color:var(--ink)}
+  .calc .lead{color:var(--muted);max-width:56ch;margin-bottom:44px}
+  .calc-card{
+    background:var(--white);border:1px solid var(--line);
+    border-radius:var(--radius);padding:38px 34px;
+    box-shadow:0 18px 50px rgba(15,23,34,.08);
+    display:grid;grid-template-columns:1fr 1fr;gap:46px;
+  }
+  .slider-row{margin-bottom:30px}
+  .slider-row:last-child{margin-bottom:0}
+  .slider-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+  .slider-top label{font-size:.93rem;font-weight:600;color:var(--muted)}
+  .slider-top output{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--blue)}
+  input[type=range]{
+    width:100%;appearance:none;-webkit-appearance:none;height:5px;border-radius:99px;
+    background:rgba(15,23,34,.14);outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+    background:var(--blue);cursor:pointer;border:3px solid var(--white);
+    box-shadow:0 0 0 2px var(--blue), 0 2px 6px rgba(15,23,34,.25);
+  }
+  input[type=range]::-moz-range-thumb{
+    width:18px;height:18px;border-radius:50%;background:var(--blue);cursor:pointer;
+    border:3px solid var(--white);box-shadow:0 0 0 2px var(--blue), 0 2px 6px rgba(15,23,34,.25);
+  }
+  .calc-results{display:flex;flex-direction:column;justify-content:center;gap:24px}
+  .res-row .res-num{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,3.6vw,2.7rem);font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+  .res-row .res-lbl{font-size:.9rem;color:var(--muted);margin-top:2px}
+  .res-sub{font-size:.78rem;color:rgba(61,71,81,.8);margin-top:5px;font-variant-numeric:tabular-nums}
+  .res-box{background:rgba(36,86,196,.06);border:1px solid rgba(36,86,196,.28);border-radius:12px;padding:22px 24px}
+  .res-box .res-num{color:var(--blue)}
+  .res-box .res-lbl{margin-top:8px;color:var(--muted)}
+  .res-unit{font-size:1.15rem;font-weight:600;color:var(--muted);letter-spacing:0}
+  .res-num-2{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:var(--blue);margin-top:3px}
+  .calc-note{font-size:.79rem;color:var(--muted);margin-top:26px;max-width:64ch}
+
+  /* ============ STATS ============ */
+  .stats{background:var(--white);padding:72px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .stat{padding:42px 40px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:0;padding-right:0}
+  .stat:first-child{padding-left:0}
+  .stat .num{font-family:'Space Grotesk',sans-serif;font-size:3.6rem;font-weight:700;letter-spacing:-.04em;color:var(--ink);line-height:1}
+  .stat .num span{color:var(--blue)}
+  .stat .lbl{font-size:.88rem;color:var(--muted);margin-top:12px;max-width:26ch;line-height:1.55}
+  .stat .lbl-head{font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin-bottom:8px}
+
+  /* ============ INSIGHT STRIP ============ */
+  .insight-strip{background:var(--paper);padding:96px 0;border-bottom:1px solid var(--line)}
+  .insight-grid{display:grid;grid-template-columns:220px 1fr;gap:56px;align-items:start}
+  .insight-divider{width:40px;height:3px;background:var(--blue);margin-top:6px}
+  .insight-statement{
+    font-family:'Space Grotesk',sans-serif;font-size:clamp(1.65rem,3.2vw,2.6rem);
+    font-weight:600;line-height:1.18;letter-spacing:-.025em;color:var(--ink);max-width:30ch;
+  }
+  .insight-statement .hl{color:var(--blue)}
+  .insight-attr{font-size:.82rem;color:var(--muted);margin-top:24px;font-style:italic}
+
+  /* ============ BRIDGE ============ */
+  .bridge{background:var(--white);padding:108px 0;text-align:center;border-bottom:1px solid var(--line)}
+  .bridge h2{font-size:clamp(2rem,4.2vw,3.2rem);max-width:22ch;margin:0 auto 20px;letter-spacing:-.03em}
+  .bridge h2 .hl{color:var(--blue)}
+  .bridge p{max-width:56ch;margin:0 auto;color:var(--muted);font-size:1.1rem}
+  .bridge p + p{margin-top:16px}
+  .bridge strong{color:var(--ink)}
+
+  /* ============ SECTIONS ============ */
+  section.block{padding:100px 0}
+  .section-head{max-width:62ch;margin-bottom:54px}
+  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.5rem);margin-bottom:14px}
+  .section-head p{color:var(--muted);font-size:1.05rem}
+
+  /* ============ HOW IT WORKS ============ */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .step{
+    background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+    padding:34px 28px;border-top:3px solid var(--blue);
+  }
+  .step .n{
+    font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:14px;
+  }
+  .step h3{font-size:1.32rem;margin-bottom:10px}
+  .step p{font-size:.96rem;color:var(--muted)}
+
+  /* ============ SERVICES ============ */
+  .svc-flag{
+    background:var(--ink);color:#fff;border-radius:var(--radius);
+    padding:46px 44px;display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:center;
+    margin-bottom:24px;
+  }
+  .badge{
+    display:inline-block;background:var(--blue-bright);color:var(--ink);
+    font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:999px;margin-bottom:16px;
+  }
+  .svc-flag h3{font-size:1.9rem;margin-bottom:12px;color:#fff}
+  .svc-flag .desc{color:var(--dark-body);font-size:1rem;margin-bottom:20px}
+  .svc-flag ul{list-style:none;display:grid;gap:9px}
+  .svc-flag li{font-size:.95rem;color:var(--dark-body);padding-left:24px;position:relative}
+  .svc-flag li::before{content:"✓";position:absolute;left:0;color:var(--blue-bright);font-weight:700}
+  .fee-box{text-align:center}
+  .fee-box .fee{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:6px}
+  .fee-box .terms{font-size:.88rem;color:var(--dark-body);margin-bottom:22px}
+  .svc-pair{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .svc-card{
+    background:var(--white);border:1px solid var(--line);border-radius:var(--radius);
+    padding:38px 32px;display:flex;flex-direction:column;
+  }
+  .svc-card h3{font-size:1.4rem;margin-bottom:10px}
+  .svc-card .desc{font-size:.95rem;color:var(--muted);margin-bottom:18px}
+  .svc-card ul{list-style:none;display:grid;gap:8px;margin-bottom:24px}
+  .svc-card li{font-size:.92rem;color:var(--muted);padding-left:22px;position:relative}
+  .svc-card li::before{content:"✓";position:absolute;left:0;color:var(--blue);font-weight:700}
+  .svc-card .terms{font-size:.86rem;color:var(--ink);font-weight:600;margin-top:auto;margin-bottom:18px}
+
+  /* ============ ABOUT ============ */
+  .about{background:var(--white);padding:100px 0;border-top:1px solid var(--line)}
+  .about-grid{display:grid;grid-template-columns:1fr 1.6fr;gap:50px;align-items:center}
+  .about-photo{
+    aspect-ratio:4/5;border-radius:var(--radius);background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif;font-size:4rem;color:var(--blue-bright);font-weight:700;
+  }
+  .about h2{font-size:clamp(1.7rem,3.2vw,2.3rem);margin-bottom:16px}
+  .about p{color:var(--muted);margin-bottom:14px}
+  .about strong{color:var(--ink)}
+
+  /* ============ FOOTER CTA ============ */
+  .footer-cta{background:var(--ink);color:#fff;text-align:center;padding:116px 0 100px}
+  .footer-cta h2{font-size:clamp(2rem,4.2vw,3rem);max-width:22ch;margin:0 auto 16px;color:#fff}
+  .footer-cta h2 .hl{color:var(--blue-bright)}
+  .footer-cta p{color:var(--dark-body);max-width:48ch;margin:0 auto 32px}
+  footer{background:var(--ink);color:var(--dark-soft);font-size:.82rem;padding:0 0 36px;text-align:center;border-top:1px solid var(--line-dark)}
+  footer .fine{max-width:70ch;margin:24px auto 14px;padding:0 22px}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none}
+    .pulse{animation:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ============ MOBILE ============ */
+  @media (max-width:860px){
+    .stats-grid{grid-template-columns:1fr}
+    .stat{border-right:0;border-bottom:1px solid var(--line);padding:30px 0}
+    .stat:first-child{padding-top:0}
+    .stat:last-child{border-bottom:0;padding-bottom:0}
+    .insight-grid{grid-template-columns:1fr;gap:24px}
+    .steps{grid-template-columns:1fr}
+    .calc-card{grid-template-columns:1fr;padding:30px 24px}
+    .svc-flag{grid-template-columns:1fr;padding:34px 26px}
+    .svc-pair{grid-template-columns:1fr}
+    .about-grid{grid-template-columns:1fr}
+    .about-photo{max-width:300px}
+    .hero{padding:128px 0 72px}
+    section.block,.bridge,.calc,.about,.insight-strip{padding:74px 0}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#top">Saenz<em>&nbsp;Intelligence</em></a>
+    <a class="btn btn-blue nav-cta" href="#contact">Book a Discovery Call</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero gridbg" id="top">
+  <div class="wrap">
+    <div class="hero-eyebrow"><span class="pulse"></span> Flat Fee · No Retainer · Virtual or On-Site</div>
+    <h1>You don't have time to figure out AI. <span class="hl">That's my job.</span></h1>
+    <p class="sub">You bring the pain points — the manual work, the Saturday tasks, the tools you're not sure about. I find where AI and automation actually pay, and hand you a one-page plan you can act on Monday. Flat fee. No retainer. You own everything after day one.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-blue" href="#contact">Book a Discovery Call</a>
+      <a class="btn btn-ghost" href="#calc">Run the math on your time</a>
+    </div>
+  </div>
+</header>
+
+<!-- CALCULATOR -->
+<section class="calc" id="calc">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">The math on your time</div>
+      <h2>What is doing this yourself actually costing you?</h2>
+      <p class="lead">Move the sliders. This is your rate against the hours you (or your best person) burn on manual work and tool tinkering every week.</p>
+    </div>
+    <div class="calc-card reveal">
+      <div>
+        <div class="slider-row">
+          <div class="slider-top">
+            <label for="rate">Your effective hourly rate</label>
+            <output id="rateOut">$250</output>
+          </div>
+          <input type="range" id="rate" min="75" max="1000" step="25" value="250">
+        </div>
+        <div class="slider-row">
+          <div class="slider-top">
+            <label for="hours">Hours per week on manual / repetitive work</label>
+            <output id="hoursOut">6 hrs</output>
+          </div>
+          <input type="range" id="hours" min="1" max="25" step="1" value="6">
+        </div>
+        <div class="slider-row">
+          <div class="slider-top">
+            <label for="automate">How much of it you'd automate</label>
+            <output id="automateOut">50%</output>
+          </div>
+          <input type="range" id="automate" min="25" max="75" step="5" value="50">
+        </div>
+      </div>
+      <div class="calc-results">
+        <div class="res-row">
+          <div class="res-num" id="yearCost">$78,000</div>
+          <div class="res-lbl">What that repetitive work costs you every year</div>
+          <div class="res-sub" id="yearSub">$250 × 6 hrs × 52 weeks</div>
+        </div>
+        <div class="res-row">
+          <div class="res-num" id="autoHrs">3 hrs</div>
+          <div class="res-lbl">The slice you'd hand off each week</div>
+          <div class="res-sub" id="autoSub">50% of those 6 hours</div>
+        </div>
+        <div class="res-box">
+          <div class="res-num"><span id="valueYr">$39,000</span><span class="res-unit"> / yr</span></div>
+          <div class="res-num-2" id="valueHrs">+ ~13 hrs / month back</div>
+          <div class="res-lbl">Value of that automated time, back in your pocket</div>
+        </div>
+      </div>
+    </div>
+    <p class="calc-note">Illustrative estimates based on the inputs above, not a guarantee of results. Recovered time depends on your workflows, tools, and follow-through.</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat reveal">
+        <div class="lbl-head">Repetitive email</div>
+        <div class="num">Daily</div>
+        <div class="lbl">100 near-identical messages drafted by a workflow instead of by hand</div>
+      </div>
+      <div class="stat reveal">
+        <div class="lbl-head">Recurring reports</div>
+        <div class="num">Weekly</div>
+        <div class="lbl">the Saturday vendor file built and sent on a schedule, untouched by you</div>
+      </div>
+      <div class="stat reveal">
+        <div class="lbl-head">Meetings</div>
+        <div class="num">Every&nbsp;call</div>
+        <div class="lbl">transcribed, summarized, and filed automatically — nothing to type up</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INSIGHT STRIP -->
+<div class="insight-strip">
+  <div class="wrap">
+    <div class="insight-grid reveal">
+      <div>
+        <div class="eyebrow">The finding</div>
+        <div class="insight-divider"></div>
+      </div>
+      <div>
+        <p class="insight-statement">The businesses winning with AI didn't acquire more tools. They identified the <span class="hl">two or three workflows worth automating</span> — and stopped there.</p>
+        <p class="insight-attr">— The difference between AI that pays and AI that just sits unused.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BRIDGE -->
+<div class="bridge">
+  <div class="wrap reveal">
+    <h2>The generic AI seminar wasn't built for <span class="hl">your business.</span></h2>
+    <p>The broad "how your industry uses AI" talk is built for a room, not for you — safe, general, and forgettable by Monday. Meanwhile your actual bottlenecks (the Saturday reports, the inbox, the copy-paste work) go untouched.</p>
+    <p><strong>I work the other direction.</strong> You tell me where the time goes; I tell you exactly what's worth automating, what's noise, and what to skip entirely.</p>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="block">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">How it works</div>
+      <h2>Three steps. No surprises.</h2>
+      <p>The same discipline I bring to enterprise systems — pointed at your business.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="n">Step 01 — Listen</div>
+        <h3>You work. I watch.</h3>
+        <p>Over a call or in person, you walk me through your week — the Saturday vendor file, the emails that have to go out, the copy-paste work — or I simply sit beside you for an hour and watch how it really runs. No prep, no interrogation. I'm listening for where time leaks, not selling you a tool.</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">Step 02 — The plan</div>
+        <h3>I do the heavy lifting</h3>
+        <p>I take what I saw, do the digging on my own time, and come back with a one-page plan in plain English: quick wins you can do this week, bigger wins worth building, and what to skip. Sometimes the answer is a SaaS tool — sometimes it's a Google Sheets script or just turning on transcription you already have.</p>
+      </div>
+      <div class="step reveal">
+        <div class="n">Step 03 — Execute</div>
+        <h3>Build or hand off</h3>
+        <p>Run the plan yourself, hand it to your team, or have me build the top items. Either way you own everything — the plan, the tools, the logins. No dependency on me.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="block" id="services" style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Services</div>
+      <h2>Flat fees. Defined scope. You own the output.</h2>
+      <p>Every engagement is a one-time flat fee, quoted after a short scoping conversation. Nothing renews automatically and nothing requires a subscription to me.</p>
+    </div>
+
+    <div class="svc-flag reveal">
+      <div>
+        <span class="badge">Start here</span>
+        <h3>The AI Operations Audit™</h3>
+        <p class="desc">The full diagnostic. I map your operation, score every AI and automation opportunity by payback, and deliver a ranked roadmap you can execute with or without me.</p>
+        <ul>
+          <li>Workflow and time-drain mapping session</li>
+          <li>Review of every tool and subscription you're paying for</li>
+          <li>Ranked roadmap with cost and payback for each opportunity</li>
+          <li>"Skip list" — the tools and trends to ignore</li>
+          <li>Readout call to walk the plan together</li>
+        </ul>
+      </div>
+      <div class="fee-box">
+        <div class="fee">One-time flat fee</div>
+        <div class="terms">Quoted on your discovery call. Confidential by default.</div>
+        <a class="btn btn-blue" href="#contact">Book a Discovery Call</a>
+      </div>
+    </div>
+
+    <div class="svc-pair">
+      <div class="svc-card reveal">
+        <h3>The Build Sprint™</h3>
+        <p class="desc">I implement the top items from your roadmap — working automations, deployed and documented, with your team trained to run them.</p>
+        <ul>
+          <li>Top roadmap items built and live</li>
+          <li>Plain-English documentation</li>
+          <li>Handoff session with you or your team</li>
+        </ul>
+        <div class="terms">One-time flat fee · Requires a completed audit</div>
+        <a class="btn btn-blue" href="#contact">Book a Discovery Call</a>
+      </div>
+      <div class="svc-card reveal">
+        <h3>The Tune-Up™</h3>
+        <p class="desc">Already using AI but not sure it's pulling its weight? A focused half-day review of your current tools, prompts, and spend.</p>
+        <ul>
+          <li>Audit of current tools and subscriptions</li>
+          <li>Quick wins implemented on the spot</li>
+          <li>One-page keep / fix / cancel summary</li>
+        </ul>
+        <div class="terms">One-time flat fee · Half-day, remote or on-site</div>
+        <a class="btn btn-blue" href="#contact">Book a Discovery Call</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="wrap about-grid">
+    <div class="about-photo reveal">JS</div>
+    <div class="reveal">
+      <div class="eyebrow">Who's behind this</div>
+      <h2>An accountant who builds.</h2>
+      <p>I'm Jeff Saenz — an accountant by training, a builder by instinct, an early adopter of AI. By day I build and ship <strong>solution-based products inside a Fortune 500 company</strong>, where speed and efficiency are the standard and "it mostly works" isn't an acceptable answer.</p>
+      <p>I've <strong>reported to CEOs</strong> and worked closely with <strong>business owners and professionals</strong> — so I get it: the grind is real, and your hours are the most valuable resource you have.</p>
+      <p>That's the lens I bring here. I understand how a business actually operates — the systems, the process, where the time goes — and I build the same way I do at work: <strong>solution-first, fast, tested, and nothing recommended unless the payback is clear.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<div class="footer-cta gridbg" id="contact">
+  <div class="wrap reveal">
+    <h2>Twenty minutes. <span class="hl">A clear answer either way.</span></h2>
+    <p>A free discovery call to see whether an audit makes sense for your business. If it doesn't, I'll tell you that — and point you somewhere useful instead.</p>
+    <a class="btn btn-blue" href="mailto:jeff.saenz@gmail.com?subject=Discovery%20Call%20—%20Saenz%20Intelligence">Book a Discovery Call</a>
+  </div>
+</div>
+
+<footer>
+  <p class="fine">Saenz Intelligence provides operational and technology advisory services. Calculator results are illustrative; outcomes depend on your business, tools, and implementation. Nothing on this site constitutes financial, legal, or tax advice.</p>
+  <p>© 2026 Saenz Intelligence · San Diego, California</p>
+</footer>
+
+<script>
+  // Calculator
+  const rate = document.getElementById('rate');
+  const hours = document.getElementById('hours');
+  const automate = document.getElementById('automate');
+
+  const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+  const hrLabel = h => h + (h === 1 ? ' hr' : ' hrs');
+
+  function calc(){
+    const r = +rate.value, h = +hours.value, a = +automate.value / 100;
+
+    document.getElementById('rateOut').textContent = fmt(r);
+    document.getElementById('hoursOut').textContent = hrLabel(h);
+    document.getElementById('automateOut').textContent = automate.value + '%';
+
+    // 1 — annual cost of that time
+    const yearly = r * h * 52;
+    document.getElementById('yearCost').textContent = fmt(yearly);
+    document.getElementById('yearSub').textContent = fmt(r) + ' × ' + hrLabel(h) + ' × 52 weeks';
+
+    // 2 — the slice handed off each week
+    const autoWk = h * a;
+    document.getElementById('autoHrs').textContent = (autoWk % 1 === 0 ? autoWk : autoWk.toFixed(1)) + ' hrs';
+    document.getElementById('autoSub').textContent = automate.value + '% of those ' + hrLabel(h);
+
+    // 3 — value back, every year
+    document.getElementById('valueYr').textContent = fmt(yearly * a);
+    document.getElementById('valueHrs').textContent = '+ ~' + Math.round(h * a * 4.33) + ' hrs / month back';
+  }
+
+  [rate, hours, automate].forEach(el => el.addEventListener('input', calc));
+  calc();
+
+  // Scroll reveals
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
